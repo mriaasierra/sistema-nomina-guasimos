@@ -1,0 +1,283 @@
+﻿@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Modo claro institucional (valores por defecto) */
+:root {
+  color-scheme: light;
+  --surface: 248 250 252; /* slate-50 */
+  --card: 255 255 255;
+  --ink: 15 23 42; /* slate-900 */
+  --muted: 51 65 85; /* slate-700: texto secundario con alto contraste */
+  --subtle: 71 85 105; /* slate-600: etiquetas pequeñas y descripciones */
+  --line: 226 232 240; /* slate-200 */
+  --nav: 30 58 138; /* royal-900 */
+  --nav-muted: 71 85 105;
+}
+
+/* Modo oscuro ejecutivo */
+.dark {
+  color-scheme: dark;
+  --surface: 15 23 42; /* slate-900 */
+  --card: 30 41 59; /* slate-800 */
+  --ink: 248 250 252; /* slate-50 */
+  --muted: 203 213 225; /* slate-300 */
+  --subtle: 148 163 184; /* slate-400 */
+  --line: 51 65 85; /* slate-700 */
+  --nav: 219 234 254; /* blue-100 */
+  --nav-muted: 191 219 254; /* blue-200 */
+}
+
+html,
+body {
+  min-height: 100%;
+}
+
+body {
+  @apply bg-surface text-ink antialiased;
+  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, sans-serif;
+  transition: background-color 200ms ease, color 200ms ease;
+}
+
+::selection {
+  background: rgba(249, 115, 22, 0.32);
+  color: #fff;
+}
+
+::-webkit-scrollbar {
+  width: 9px;
+  height: 9px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgb(var(--surface));
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgb(var(--line));
+  border-radius: 9999px;
+  border: 2px solid rgb(var(--surface));
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgb(var(--muted));
+}
+
+@layer components {
+  .card {
+    @apply rounded-2xl border border-line bg-card shadow-card;
+  }
+
+  .card-hover {
+    @apply transition duration-300 hover:-translate-y-0.5 hover:border-accent/50 hover:shadow-gold;
+  }
+
+  .section-label {
+    @apply text-xs font-semibold uppercase tracking-widest2 text-muted;
+  }
+
+  .table-head {
+    @apply whitespace-nowrap px-5 py-3.5 text-left text-xs font-semibold uppercase tracking-widest2 text-muted;
+  }
+
+  .table-cell {
+    @apply whitespace-nowrap px-5 py-4 text-base text-ink;
+  }
+
+  .gold-gradient {
+    background: linear-gradient(135deg, #ea580c 0%, #fb923c 50%, #f97316 100%);
+  }
+
+  .royal-gradient {
+    background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 50%, #2563eb 100%);
+  }
+
+  .gold-text {
+    @apply bg-gradient-to-r from-gold-light via-gold to-gold-dark bg-clip-text text-transparent;
+  }
+
+  .sidebar-surface {
+    background: linear-gradient(180deg, #0b1b4d 0%, #0d1f4f 45%, #0f172a 100%);
+  }
+
+  html:not(.dark) .sidebar-surface {
+    background: linear-gradient(180deg, #1e40af 0%, #ffffff 30%, #f8fafc 100%);
+  }
+
+  input,
+  select,
+  textarea {
+    @apply text-base;
+  }
+
+  button {
+    @apply text-sm;
+  }
+}
+
+/* Contraste del acento naranja sobre fondos claros */
+html:not(.dark) .text-gold,
+html:not(.dark) .text-gold-light,
+html:not(.dark) .text-gold\/70,
+html:not(.dark) .text-gold\/80,
+html:not(.dark) .text-gold-light\/70,
+html:not(.dark) .text-gold-light\/80,
+html:not(.dark) .hover\:text-gold:hover,
+html:not(.dark) .hover\:text-gold-light:hover {
+  color: #c2410c;
+}
+
+html:not(.dark) .gold-text {
+  background-image: linear-gradient(135deg, #9a3412 0%, #c2410c 50%, #ea580c 100%);
+}
+
+/* Badges de estado legibles sobre superficies claras */
+html:not(.dark) .text-sky-300 {
+  color: #0369a1;
+}
+
+html:not(.dark) .text-amber-300 {
+  color: #b45309;
+}
+
+html:not(.dark) .text-emerald-300,
+html:not(.dark) .text-emerald-200\/80 {
+  color: #047857;
+}
+
+html:not(.dark) .text-rose-200,
+html:not(.dark) .text-rose-300 {
+  color: #9f1239;
+}
+
+html:not(.dark) .text-violet-300 {
+  color: #6d28d9;
+}
+
+/* Texto gris institucional en negro sólido únicamente en Modo Claro.
+   Se excluyen expresamente los acentos naranjas, azules, blancos y gold-text. */
+@media screen {
+  /* `:where()` mantiene baja la especificidad: el gris base pasa a negro,
+     pero las variantes hover:text-gold / hover:text-orange siguen aplicando. */
+  :where(html:not(.dark))
+    :is(
+      body,
+      [class*="text-slate-"],
+      [class*="text-gray-"],
+      [class*="text-zinc-"],
+      [class*="text-neutral-"],
+      [class*="text-stone-"],
+      [class*="text-muted"],
+      [class*="text-subtle"],
+      [class*="text-ink"],
+      .table-head,
+      .section-label,
+      .table-cell
+    ):where(
+      :not(
+        :is(
+          [class^="text-gold"],
+          [class*=" text-gold"],
+          [class^="text-orange"],
+          [class*=" text-orange"],
+          [class^="text-amber"],
+          [class*=" text-amber"],
+          [class^="text-white"],
+          [class*=" text-white"],
+          [class^="text-royal"],
+          [class*=" text-royal"],
+          [class^="text-blue"],
+          [class*=" text-blue"],
+          [class^="text-nav"],
+          [class*=" text-nav"],
+          [class~="gold-text"]
+        )
+      )
+    ) {
+    color: #000000;
+  }
+
+  html:not(.dark) input::placeholder,
+  html:not(.dark) textarea::placeholder {
+    color: #000000 !important;
+  }
+}
+
+/* Sombras más suaves en el modo claro institucional */
+html:not(.dark) .card {
+  box-shadow: 0 10px 30px -20px rgba(15, 23, 42, 0.35);
+}
+
+/* Transición suave al alternar el tema */
+.card,
+aside,
+header,
+.card * {
+  transition-property: background-color, border-color, color;
+  transition-duration: 200ms;
+}
+
+/* Impresión de recibos, planillas y hojas de liquidación */
+@media print {
+  @page {
+    size: A4 landscape;
+    margin: 10mm;
+  }
+
+  body * {
+    visibility: hidden !important;
+  }
+
+  .print-target,
+  .print-target * {
+    visibility: visible !important;
+  }
+
+  .print-target {
+    position: fixed !important;
+    inset: 0 !important;
+    z-index: 9999 !important;
+    overflow: visible !important;
+    background: #ffffff !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  .print-target * {
+    color: #111827 !important;
+    background: transparent !important;
+    border-color: #cbd5e1 !important;
+    box-shadow: none !important;
+  }
+
+  /* La planilla de 18 columnas debe ajustarse al ancho del papel. */
+  .print-target .planilla-print-wrapper {
+    overflow: visible !important;
+  }
+
+  .print-target .planilla-table {
+    width: 100% !important;
+    min-width: 0 !important;
+    font-size: 7pt !important;
+  }
+
+  .print-target .planilla-table th {
+    background: #e2e8f0 !important;
+    color: #0f172a !important;
+    border-color: #94a3b8 !important;
+    font-size: 7pt !important;
+    padding: 3px 4px !important;
+  }
+
+  .print-target .planilla-table td {
+    color: #0f172a !important;
+    border-color: #cbd5e1 !important;
+    font-size: 7pt !important;
+    padding: 3px 4px !important;
+  }
+
+  .no-print {
+    display: none !important;
+  }
+}
